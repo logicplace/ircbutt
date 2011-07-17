@@ -1,0 +1,82 @@
+:cirno.ppirc.net NOTICE AUTH :*** Looking up your hostname...
+:cirno.ppirc.net NOTICE AUTH :*** Found your hostname (cached)
+:cirno.ppirc.net NOTICE AUTH :*** Checking ident...
+NICK test123
+USER test 8 * :Huegh
+
+:cirno.ppirc.net NOTICE AUTH :*** No ident response; username prefixed with ~
+:cirno.ppirc.net 001 test123 :Welcome to the PPIrC IRC Network test123!~test@c-24-22-87-1.hsd1.or.comcast.net
+:cirno.ppirc.net 002 test123 :Your host is cirno.ppirc.net, running version Unreal3.2.8.1
+:cirno.ppirc.net 003 test123 :This server was created Mon May 16 2011 at 22:59:37 CDT
+:cirno.ppirc.net 004 test123 cirno.ppirc.net Unreal3.2.8.1 iowghraAsORTVSxNCWqBzvdHtGp lvhopsmntikrRcaqOALQbSeIKVfMCuzNTGj
+:cirno.ppirc.net 005 test123 UHNAMES NAMESX SAFELIST HCN MAXCHANNELS=32 CHANLIMIT=#:32 MAXLIST=b:60,e:60,I:60 NICKLEN=30 CHANNELLEN=32 TOPICLEN=307 KICKLEN=307 AWAYLEN=307 MAXTARGETS=20 :are supported by this server
+:cirno.ppirc.net 005 test123 WALLCHOPS WATCH=128 WATCHOPTS=A SILENCE=15 MODES=12 CHANTYPES=# PREFIX=(qaohv)~&@%+ CHANMODES=beI,kfL,lj,psmntirRcOAQKVCuzNSMTG NETWORK=PPIrC CASEMAPPING=ascii EXTBAN=~,cqnr ELIST=MNUCT STATUSMSG=~&@%+ :are supported by this server
+:cirno.ppirc.net 005 test123 EXCEPTS INVEX CMDS=KNOCK,MAP,DCCALLOW,USERIP :are supported by this server
+:cirno.ppirc.net 251 test123 :There are 136 users and 119 invisible on 2 servers
+:cirno.ppirc.net 252 test123 3 :operator(s) online
+:cirno.ppirc.net 254 test123 102 :channels formed
+:cirno.ppirc.net 255 test123 :I have 237 clients and 0 servers
+:cirno.ppirc.net 265 test123 :Current Local Users: 237  Max: 500
+:cirno.ppirc.net 266 test123 :Current Global Users: 255  Max: 515
+:cirno.ppirc.net 375 test123 :- cirno.ppirc.net Message of the Day - 
+:cirno.ppirc.net 372 test123 :- 25/4/2009 0:36
+:cirno.ppirc.net 372 test123 :-    __      __
+:cirno.ppirc.net 372 test123 :-  _ \ \    / /
+:cirno.ppirc.net 372 test123 :- (_) \ \  / / 
+:cirno.ppirc.net 372 test123 :-  _   \ \/ /  
+:cirno.ppirc.net 372 test123 :- (_)   \  /   
+:cirno.ppirc.net 372 test123 :-        \/  
+:cirno.ppirc.net 372 test123 :- 
+:cirno.ppirc.net 372 test123 :- cirno.ppirc.net - I am the strongest!
+:cirno.ppirc.net 372 test123 :-  ___________ __________________________________________________________________
+:cirno.ppirc.net 372 test123 :- |           |                                                      <[oO<]      |
+:cirno.ppirc.net 372 test123 :- |___________|__________________________________________________________________|
+:cirno.ppirc.net 372 test123 :- 
+:cirno.ppirc.net 372 test123 :- You have now entered... the No Thought Zone </O'Reily>
+:cirno.ppirc.net 372 test123 :- 
+:cirno.ppirc.net 372 test123 :- Website > http://www.ppirc.net/
+:cirno.ppirc.net 372 test123 :-  ___________ __________________________________________________________________
+:cirno.ppirc.net 372 test123 :- |           |                                                      [>Oo]>      |
+:cirno.ppirc.net 372 test123 :- |___________|__________________________________________________________________| 
+:cirno.ppirc.net 372 test123 :- 
+:cirno.ppirc.net 372 test123 :- Staff
+:cirno.ppirc.net 372 test123 :- 
+:cirno.ppirc.net 372 test123 :-         > TheStupidOne (Owner and captain of Air Moron)
+:cirno.ppirc.net 372 test123 :-         > |7hs| (Network chaplain and co-pilot on Air Moron)
+:cirno.ppirc.net 372 test123 :-         > Blitzwing01 (Stewardess on Air Moron)
+:cirno.ppirc.net 372 test123 :-         > Link (Resident child porn specialist and mascot for Air Moron)
+:cirno.ppirc.net 372 test123 :-         > rensu (Bowlmaster and thuglyfe consultant for Air Moron)
+:cirno.ppirc.net 372 test123 :-  ___________ __________________________________________________________________
+:cirno.ppirc.net 372 test123 :- |           |                                                      <[oO<]      |
+:cirno.ppirc.net 372 test123 :- |___________|__________________________________________________________________|
+:cirno.ppirc.net 372 test123 :- 
+:cirno.ppirc.net 372 test123 :- Rules
+:cirno.ppirc.net 372 test123 :- 
+:cirno.ppirc.net 372 test123 :-         > Don't be a dumbass or a jerk
+:cirno.ppirc.net 372 test123 :-         > Don't do illegal things (or at least let one of us find out)
+:cirno.ppirc.net 372 test123 :-         > Connecting is a privilege, not a right
+:cirno.ppirc.net 372 test123 :-         > Watch Nanoha, play Pangya, get bitches, live da thug lyfe
+:cirno.ppirc.net 372 test123 :-  ___________ __________________________________________________________________
+:cirno.ppirc.net 372 test123 :- |           |                                                      [>Oo]>      |
+:cirno.ppirc.net 372 test123 :- |___________|__________________________________________________________________|
+:cirno.ppirc.net 372 test123 :- 
+:cirno.ppirc.net 372 test123 :- Useful Info
+:cirno.ppirc.net 372 test123 :- 
+:cirno.ppirc.net 372 test123 :-         > This network has services, the usual NickServ/ChanServ works 
+:cirno.ppirc.net 372 test123 :-         > Don't be surprised if Kooh is asking for your password, they have
+:cirno.ppirc.net 372 test123 :-           other names too (Pangya characters if you don't get the reference)
+:cirno.ppirc.net 372 test123 :-         > Vhosts are available upon request, ask someone with a ~ in #help
+:cirno.ppirc.net 372 test123 :-         > If you have any problems, type /help question or /join #help
+:cirno.ppirc.net 372 test123 :-         > Big channels are #shrinemaiden, #ndt, and #albatross18, check in if
+:cirno.ppirc.net 372 test123 :-           you're new
+:cirno.ppirc.net 372 test123 :-         > If you know what SSL is, you can connect to irc.ppirc.net port 6601
+:cirno.ppirc.net 372 test123 :-  ___________ __________________________________________________________________
+:cirno.ppirc.net 372 test123 :- |           |                                                      <[oO<]      |
+:cirno.ppirc.net 372 test123 :- |___________|__________________________________________________________________|
+:cirno.ppirc.net 372 test123 :- 
+:cirno.ppirc.net 376 test123 :End of /MOTD command.
+:test123 MODE test123 :+wx
+:Kaz!security@I.am.a.bot PRIVMSG test123 :VERSION
+:Kaz!security@I.am.a.bot PRIVMSG test123 :LAG
+:services.ppirc.net NOTICE test123 :[Logon News Jan 20 2009] Services have been completely wiped and reset, so make sure to reregister your nicks and channels, and feel free to ask an IRCOp to reset any vhosts you may have had
+:services.ppirc.net NOTICE test123 :[Logon News Jan 20 2009] Poor Reimu can't pay for the server on her own anymore T_T, please be kind and slip a donation into her box.  Paypal any amount to donationbox@shrinemaiden.org and maybe she'll rig your next fortune...
