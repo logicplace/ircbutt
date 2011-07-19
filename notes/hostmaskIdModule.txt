@@ -12,9 +12,13 @@ Kansas (ks)
 *) Mission (mssn)
 Tennesee (tn)
 *) Nashville (nsvl)
+Texas (tx)
+*) Houston (hstn)
 
 === Cox ===
 ip24-251-157-63.ph.ph.cox.net
+*.fv.ks.cox.net
+*.rn.hr.cox.net
 
 === Comcast ===
 /[.]+\.[.]+\.([.]+)\.comcast\.net/ 1: State
@@ -27,6 +31,7 @@ Can geoip that +.0 for location.
 === Charter ===
 qq-33BF0DCC.dhcp.atsc.ca.charter.com
 qq-63107FFC.dhcp.roch.mn.charter.com
+qq-915237B7.dhcp.ftwo.tx.charter.com
 
 === Verizon ===
 qq-AF5A7345.nycmny.fios.verizon.net
@@ -52,3 +57,4 @@ qq-7DC600FB.static.tpgi.com.au
 1-1-10-34a.hs.hs.bostream.se
 D97BF566.cm-3-4d.dynamic.ziggo.nl
 173-12-15-179-panjde.hfc.comcastbusiness.net
+*.tys.bellsouth.net
