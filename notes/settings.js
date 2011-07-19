@@ -3,7 +3,7 @@
 **/
 {
 	/** HOST **
-	* Networks to connect to
+	* Network to connect to
 	* Port is optional, defaults to 6667
 	* Accepts string, array
 	**/
@@ -13,8 +13,6 @@
 	host: "irc.server.net:8080",
 	//Two addresses to the same network (cycle ltr)
 	host: ["p1.server1.net","p2.server1.net"],
-	//Two networks, one with two addresses
-	host: [["p1.server1.net","p2.server1.net"],"irc.woot.net"],
 	
 	/** CHANNEL **
 	* Channel(s) to connect to
@@ -35,8 +33,8 @@
 	nick: [
 		//Registered nick
 		{"Nick": "nickspass"},
-		//Single unregistered nick
-		{"Bot": null},
+		//Single unregistered nicks
+		"Bot", {"Bot": null},
 		//Group of unregistered nicks
 		["a","b"],
 	],
@@ -81,7 +79,7 @@
 		//How many messages to send at once
 		amount: [5,1], //<- Defaults
 		//How long to wait between dumps (in milliseconds)
-		wait: [0,1000], //<- Defaults
+		wait: [0,2000], //<- Defaults
 		//Maximum amount of characters allowed per line. If it exceeds the maximum amount
 		//+(512 including \r\n and raw stuff) it will be lessened accordingly
 		chars: [512,256], //<- Defaults 

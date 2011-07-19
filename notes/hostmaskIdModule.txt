@@ -1,0 +1,54 @@
+http://www.usps.com/ncsc/lookups/usps_abbreviations.html#states
+
+=== SBC Global (AT&T High speed internet) ==
+/[.]+\.lightspeed\.(.{4})(.{2})\.sbcglobal\.net/ 1: City; 2: State
+qq-4D1377F7.dsl.lsan03.sbcglobal.net (Los Angeles?)
+99-105-56-162.lightspeed.sntcca.sbcglobal.net
+adsl-99-173-15-158.dsl.pltn13.sbcglobal.net
+Standard state codes
+California (ca)
+*) Santa Cruz? (sntc)
+Kansas (ks)
+*) Mission (mssn)
+Tennesee (tn)
+*) Nashville (nsvl)
+
+=== Cox ===
+ip24-251-157-63.ph.ph.cox.net
+
+=== Comcast ===
+/[.]+\.[.]+\.([.]+)\.comcast\.net/ 1: State
+Standard state codes
+
+=== Verizon Wireless ===
+/[.]+\.sub((-[0-9]+){3})\.myvzw\.com/ 1: Subnet (hyphen separated)
+Can geoip that +.0 for location.
+
+=== Charter ===
+qq-33BF0DCC.dhcp.atsc.ca.charter.com
+qq-63107FFC.dhcp.roch.mn.charter.com
+
+=== Verizon ===
+qq-AF5A7345.nycmny.fios.verizon.net
+qq-A43AA448.washdc.east.verizon.net
+qq-FF31FF58.tampfl.fios.verizon.net
+
+=== TELUS Canada ===
+qq-1844254.abhsia.telus.net
+
+=== Numericable ===
+qq-F12B11CB.rev.numericable.fr
+
+=== RoadRunner ==
+cpe-75-186-34-184.cinci.res.rr.com
+cpe-174-107-224-238.sc.res.rr.com
+qq-E1EF65CA.carolina.res.rr.com
+
+=== Other ===
+qq-6B5F1316.jetstream.xtra.co.nz (Christchurch, NZ)
+qq-43B6D918.lns1.way.bigpond.net.au
+qq-7DC600FB.static.tpgi.com.au
+173-26-54-103.client.mchsi.com
+1-1-10-34a.hs.hs.bostream.se
+D97BF566.cm-3-4d.dynamic.ziggo.nl
+173-12-15-179-panjde.hfc.comcastbusiness.net
