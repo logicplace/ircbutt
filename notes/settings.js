@@ -76,12 +76,14 @@
 	/** Flood control options **/
 	flood: {
 		//All are arrays denoting [While flood prevention is disabled, While it's enabled]
-		//How many messages to send at once
-		amount: [5,1], //<- Defaults
-		//How long to wait between dumps (in milliseconds)
+		//How many messages to send before limiting
+		amount: 5, //<- Defaults
+		//How long to wait between messages (in milliseconds)
+		wait: 2000, //Applies always
 		wait: [0,2000], //<- Defaults
 		//Maximum amount of characters allowed per line. If it exceeds the maximum amount
 		//+(512 including \r\n and raw stuff) it will be lessened accordingly
+		chars: 512, //Applies always
 		chars: [512,256], //<- Defaults 
 	},
 	
