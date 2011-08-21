@@ -1,5 +1,5 @@
 var
-	splitter = require("../splitter.js")
+	splitter = require("splitter.js")
 	,comp = require("comp")
 ;
 
@@ -87,7 +87,7 @@ var
 			abc: "aaa", b: "terraform"
 		}],
 		["Reference 1",ref1,"Ref ba9ca0",{r:{hi:"ba9ca0"}}],
-		["Reference 2",ref2,"Ref a ba 90",{r:{b:{hi:"ba"},a:{hi:"90"}}}],
+		["Reference 2",ref2,"Ref a ba 90",{r:{b:{hi:"ba"},c:{hi:"90"}}}],
 		["Reference 3",ref3,"Ref 3 b a abc0 999",{r:{hi:["b","a","abc0","999"]}}],
 		["Reference 4",ref4,"Ref bb,aa,08,c",{r:{hi:["bb","aa","08","c"]}}],
 	]
