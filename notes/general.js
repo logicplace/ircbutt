@@ -3,6 +3,7 @@ identd: http://tools.ietf.org/html/rfc1413
 irc-old: http://www.irchelp.org/irchelp/rfc/rfc.html
 irc: http://tools.ietf.org/html/rfc2812
 005: http://www.irc.org/tech_docs/005.html
+best: http://www.alien.net.au/irc/irc2numerics.html
 */
 
 /* SUPPORT
