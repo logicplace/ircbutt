@@ -26,10 +26,12 @@ var
 	,multiple4 = new splitter("/hex:[0-9a-fA-F]+/*")
 	,sep1 = new splitter("<,|list1>* {,|list2}*")
 	,groups = new splitter("[optional:<abc> ](a <a>)|(b <b>)")
+	,groupList = new splitter("(.|Hi my name is <name>)*")
 	,ref1 = new splitter("Ref <r@_one>",globals)
 	,ref2 = new splitter("Ref <r@_two>",globals)
 	,ref3 = new splitter("Ref <r@_thr>",globals)
 	,ref4 = new splitter("Ref <r@_fff>",globals)
+	,optional = new splitter("blah blah :{comment}?",globals)
 	
 	//Name, splitter, strToParse, expectedResult, [exceptionTypeExpected]
 	,readTests = [
@@ -86,10 +88,15 @@ var
 		["Groups 3",groups,"optional:aaa b terraform",{
 			abc: "aaa", b: "terraform"
 		}],
+		["Group List",groupList,"Hi my name is John.Hi my name is Alfred",{
+			"0": [{name:"John"},{name:"Alfred"}]
+		}],
 		["Reference 1",ref1,"Ref ba9ca0",{r:{hi:"ba9ca0"}}],
 		["Reference 2",ref2,"Ref a ba 90",{r:{b:{hi:"ba"},c:{hi:"90"}}}],
 		["Reference 3",ref3,"Ref 3 b a abc0 999",{r:{hi:["b","a","abc0","999"]}}],
-		["Reference 4",ref4,"Ref bb,aa,08,c",{r:{hi:["bb","aa","08","c"]}}],
+		["Reference 4",ref4,"Ref bb,aa,08,c",{r:{b:{hi:["bb","aa","08","c"]}}}],
+		["Optional Token 1",optional,"blah blah :",{}],
+		["Optional Token 2",optional,"blah blah :haahahah",{comment:"haahahah"}],
 	]
 	
 	//Name, splitter, dataToInsert, expectedResult, [exceptionTypeExpected]
@@ -150,6 +157,15 @@ var
 		["Groups 3",groups,{
 			abc: "aaa", b: "terraform"
 		},"optional:aaa b terraform"],
+		["Group List",groupList,{
+			"0": [{name:"John"},{name:"Alfred"}]
+		},"Hi my name is John.Hi my name is Alfred"],
+		["Reference 1",ref1,{r:{hi:"ba9ca0"}},"Ref ba9ca0"],
+		["Reference 2",ref2,{r:{b:{hi:"ba"},c:{hi:"90"}}},"Ref a ba 90"],
+		["Reference 3",ref3,{r:{hi:["b","a","abc0","999"]}},"Ref 3 b a abc0 999"],
+		["Reference 4",ref4,{r:{b:{hi:["bb","aa","08","c"]}}},"Ref bb,aa,08,c"],
+		["Optional Token 1",optional,{},"blah blah :"],
+		["Optional Token 2",optional,{comment:"haahahah"},"blah blah :haahahah"],
 	]
 ;
 
