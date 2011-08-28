@@ -18,6 +18,9 @@ var
 	,limited4 = new splitter("<limit!7na@>")
 	,limited5 = new splitter("<limit!7na@+>")
 	,spaced = new splitter("{spaced}")
+	,condSpaced1 = new splitter("{cond?:}")
+	,condSpaced2 = new splitter("{cond??:}")
+	,condSpaced3 = new splitter('{cond?">"}')
 	,regex = new splitter("/regex:[abc123]+/")
 	,allSimple = new splitter("Hi <angle>, {spaced}. And /regex:((good)?bye|farewell)/!")
 	,multiple1 = new splitter("<params>* -- {message}")
@@ -31,7 +34,9 @@ var
 	,ref2 = new splitter("Ref <r@_two>",globals)
 	,ref3 = new splitter("Ref <r@_thr>",globals)
 	,ref4 = new splitter("Ref <r@_fff>",globals)
+	,ref5 = new splitter("<blah:abcd#> <xxx@blah>")
 	,optional = new splitter("blah blah :{comment}?",globals)
+	,insensitive = new splitter("NICKSERV IDENTIFY <password>",{},true)
 	
 	//Name, splitter, strToParse, expectedResult, [exceptionTypeExpected]
 	,readTests = [
@@ -53,6 +58,18 @@ var
 		["Limited 5.2 (fail)",limited5,"ba7",null],
 		["Spaced 1",spaced,"blargh",{spaced:"blargh"}],
 		["Spaced 2",spaced,"one two",{spaced:"one two"}],
+		["Conditionally Spaced 1.1",condSpaced1,"abc",{"cond":"abc"}],
+		["Conditionally Spaced 1.2 (fail)",condSpaced1,"abc def",null],
+		["Conditionally Spaced 1.3",condSpaced1,":Hi there!",{"cond":"Hi there!"}],
+		//["Conditionally Spaced 1.4 (fail)",condSpaced1,":",null],
+		["Conditionally Spaced 2.1",condSpaced2,"abc",{"cond":"abc"}],
+		["Conditionally Spaced 2.2 (fail)",condSpaced2,"abc def",null],
+		["Conditionally Spaced 2.3",condSpaced2,":Hi there!",{"cond":"Hi there!"}],
+		["Conditionally Spaced 2.4",condSpaced2,":",{}],
+		["Conditionally Spaced 3.1",condSpaced3,'"abc',{"cond":'"abc'}],
+		["Conditionally Spaced 3.2 (fail)",condSpaced3,'"abc def',null],
+		["Conditionally Spaced 3.3",condSpaced3,'"Hi there!"',{"cond":"Hi there!"}],
+		//["Conditionally Spaced 3.4 (fail)",condSpaced3,'""',null],
 		["Regex 1",regex,"abc",{regex:"abc"}],
 		["Regex 2 (fail)",regex,"abc 123",null],
 		["All",allSimple,"Hi user, welcome to the test suite. And farewell!",{
@@ -95,8 +112,11 @@ var
 		["Reference 2",ref2,"Ref a ba 90",{r:{b:{hi:"ba"},c:{hi:"90"}}}],
 		["Reference 3",ref3,"Ref 3 b a abc0 999",{r:{hi:["b","a","abc0","999"]}}],
 		["Reference 4",ref4,"Ref bb,aa,08,c",{r:{b:{hi:["bb","aa","08","c"]}}}],
+		["Inline Reference",ref5,"hurr hurr",{blah:"hurr",xxx:"hurr"}],
+		["Inline Reference (fail)",ref5,"hurr durr",null],
 		["Optional Token 1",optional,"blah blah :",{}],
 		["Optional Token 2",optional,"blah blah :haahahah",{comment:"haahahah"}],
+		["Case Insensitivity",insensitive,"nickserv identify hurgajs",{password:"hurgajs"}],
 	]
 	
 	//Name, splitter, dataToInsert, expectedResult, [exceptionTypeExpected]
@@ -118,6 +138,15 @@ var
 		["Limited 5.2 (fail)",limited5,{limit:"ba7"},null,"AssertionFailed"],
 		["Spaced 1",spaced,{spaced:"blargh"},"blargh"],
 		["Spaced 2",spaced,{spaced:"one two"},"one two"],
+		["Conditionally Spaced 1.1",condSpaced1,{"cond":"abc"},":abc"],
+		["Conditionally Spaced 1.2",condSpaced1,{"cond":"Hi there!"},":Hi there!"],
+		//["Conditionally Spaced 1.3 (fail)",condSpaced1,":",null],
+		["Conditionally Spaced 2.1",condSpaced2,{"cond":"abc"},":abc"],
+		["Conditionally Spaced 2.2",condSpaced2,{"cond":"Hi there!"},":Hi there!"],
+		["Conditionally Spaced 2.3",condSpaced2,{},":"],
+		["Conditionally Spaced 3.1",condSpaced3,{"cond":'"abc'},'"abc'],
+		["Conditionally Spaced 3.2",condSpaced3,{"cond":"Hi there!"},'"Hi there!"'],
+		//["Conditionally Spaced 3.3 (fail)",condSpaced3,'""',null],
 		["Regex 1",regex,{regex:"abc"},"abc"],
 		["Regex 2 (fail)",regex,{regex:"abc 123"},null,"AssertionFailed"],
 		["All",allSimple,{
@@ -164,8 +193,11 @@ var
 		["Reference 2",ref2,{r:{b:{hi:"ba"},c:{hi:"90"}}},"Ref a ba 90"],
 		["Reference 3",ref3,{r:{hi:["b","a","abc0","999"]}},"Ref 3 b a abc0 999"],
 		["Reference 4",ref4,{r:{b:{hi:["bb","aa","08","c"]}}},"Ref bb,aa,08,c"],
+		["Inline Reference",ref5,{blah:"hurr",xxx:"hurr"},"hurr hurr"],
+		["Inline Reference (fail)",ref5,{blah:"hurr",xxx:"durr"},null,"AssertionFailed"],
 		["Optional Token 1",optional,{},"blah blah :"],
 		["Optional Token 2",optional,{comment:"haahahah"},"blah blah :haahahah"],
+		["Case Insensitivity",insensitive,{password:"hurgajs"},"NICKSERV IDENTIFY hurgajs"],
 	]
 ;
 
