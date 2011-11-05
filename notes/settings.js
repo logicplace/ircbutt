@@ -111,8 +111,8 @@
 	
 	/** Various options **/
 	//IRC Spec to use
-	//Accepts a string of: "rfc1459", "rfc281x"
-	spec: "rfc1459",
+	//Accepts an array or string of specs used for writing
+	spec: ["other","rfc2","rfc1"],
 	//Which method to use for authing your nick
 	//NickServ and AuthServ are included, more may be added
 	//May accept an array to pass arguments to module
@@ -137,6 +137,8 @@
 	/** Modules **/
 	modules: {
 		"modname": {
+			//Paths are relative to the base folder/modules
+			"path": "path/to/module",
 			//Module options
 		},
 		//...

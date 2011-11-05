@@ -27,3 +27,22 @@ best: http://www.alien.net.au/irc/irc2numerics.html
 ** Adusting user list based on JOIN, KICK, QUIT, PART, etc.
 * Able to run as a server as well
 */
+
+/*
+Server:
+irc (user connects, add connection to knowledge)
+exe <- irc (emit connection event)
+exe <- irc (emit PASS event)
+exe (verify pass, send error message as necessary (-> irc))
+exe <- irc (emit NICK event)
+exe -> irc (is there a connection using the nick NICK?)
+if true: exe -> irc (send error)
+if false: exe -> irc (set this connection's NICK to x)
+exe <- irc (emit USER event)
+exe -> irc (set this connection's username, realname, and possibly modes)
+exe -> irc (send welcome messages and MOTD)
+exe <- irc (emit JOIN event)
+exe (verify this user has access to the channel)
+if true: exe -> irc (send success, add connection to CHANNEL)
+if false: exe -> irc (send error) 
+*/
