@@ -1,4 +1,0 @@
-tokens = [lit,tokenOptions,lit]*
-tokenOptions = [token]*
-token = [name,regex,modifiers,sourceIndex,separator]
-token = [tokens,regex,modifiers,sourceIndex,separator]
