@@ -55,62 +55,64 @@ module.exports = function Reporting(irc) {
 	}
 
 	// Main page
-	irc.emit("register-http", {
-		"page": "/reports",
-		"handler": lockdown(function (data) {
-			// Return the page
-			return { "html": fs.readFileSync(__dirname + "/reporting/index.html") };
-		}),
-	});
+	irc.on("modules-loaded", function() {
+		irc.emit("register-http", {
+			"page": "/reports",
+			"handler": lockdown(function (data) {
+				// Return the page
+				return { "html": fs.readFileSync(__dirname + "/reporting/index.html") };
+			}),
+		});
 
-	// API call for unhandled reports
-	irc.emit("register-http", {
-		"page": "/reports/active",
-		"handler": lockdown(function (data, permissions) {
-			var reports;
-			if (permissions.indexOf("all") != -1) {
-				// Get all unhandled reports.
-				reports = memory.retrieve("reports", {
-					"handled": false,
-				})
-			} else {
-				// Return any reports from users in managed channels
-				reports = memory.retrieve("reports", function (report) {
-					return report.handled == false && _.intersection(permissions.channels, report.channels).length > 0;
-				});
-			}
+		// API call for unhandled reports
+		irc.emit("register-http", {
+			"page": "/reports/active",
+			"handler": lockdown(function (data, permissions) {
+				var reports;
+				if (permissions.indexOf("all") != -1) {
+					// Get all unhandled reports.
+					reports = memory.retrieve("reports", {
+						"handled": false,
+					})
+				} else {
+					// Return any reports from users in managed channels
+					reports = memory.retrieve("reports", function (report) {
+						return report.handled == false && _.intersection(permissions.channels, report.channels).length > 0;
+					});
+				}
 
-			// Sort them
-			_(reports).sortBy("date");
+				// Sort them
+				_(reports).sortBy("date");
 
-			// and return
-			return { "json": reports };
-		}),
-	});
+				// and return
+				return { "json": reports };
+			}),
+		});
 
-	// API call for handled reports
-	irc.emit("register-http", {
-		"page": "/reports/closed/<#page>[/<#perpage>]",
-		"handler": lockdown(function (data, permissions) {
-			var reports;
-			if (permissions.indexOf("all") != -1) {
-				// Get all unhandled reports.
-				reports = memory.retrieve("reports", {
-					"handled": true,
-				});
-			} else {
-				// Return any reports from users in managed channels
-				reports = memory.retrieve("reports", function (report) {
-					return report.handled && _.intersection(permissions.channels, report.channels).length > 0;
-				});
-			}
+		// API call for handled reports
+		irc.emit("register-http", {
+			"page": "/reports/closed/<#page>[/<#perpage>]",
+			"handler": lockdown(function (data, permissions) {
+				var reports;
+				if (permissions.indexOf("all") != -1) {
+					// Get all unhandled reports.
+					reports = memory.retrieve("reports", {
+						"handled": true,
+					});
+				} else {
+					// Return any reports from users in managed channels
+					reports = memory.retrieve("reports", function (report) {
+						return report.handled && _.intersection(permissions.channels, report.channels).length > 0;
+					});
+				}
 
-			// Sort them
-			_(reports).sortBy("date");
+				// Sort them
+				_(reports).sortBy("date");
 
-			// and return
-			var perpage = data.params.perpage || 10, start = data.params.page * perpage;
-			return { "json": reports.slice(start, start + perpage) };
-		}),
+				// and return
+				var perpage = data.params.perpage || 10, start = data.params.page * perpage;
+				return { "json": reports.slice(start, start + perpage) };
+			}),
+		});
 	});
 }
