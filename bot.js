@@ -4,12 +4,18 @@ console.log("Starting server...");
 var server = net.createServer(function (c) {
 	console.log("Client connected");
 
+	function send (buffer) {
+		console.log("Sending:", buffer)
+		c.write(buffer)
+	}
+
 	c.on("data", function (d) {
 		console.log("Received:", d.toString());
 		if (d.toString().match(/^USER/m)) {
-			var buffer = ":cirno.ppirc.net 001 Nao-tan :Welcome to the PPIrC IRC Network Nao-tan!~Nao-tan@localhost\r\n";
-			console.log("Sending:", buffer)
-			c.write(buffer)
+			send(":cirno.ppirc.net 001 Nao-tan :Welcome to the PPIrC IRC Network Nao-tan!~Nao-tan@localhost\r\n");
+			setTimeout(function () {
+				send(":Person!person@localhost PRIVMSG Nao-tan :u suck\r\n");
+			}, 1500)
 		}
 	});
 
@@ -28,10 +34,14 @@ server.listen(6667, function () {
 		"nickpass": "petrock",
 		"servers": ["localhost"],
 		"specification": "rfc281x",
-		"plugins": ["nickserv"],
+		"plugins": ["http", "reporting", "nickserv"],
 		"email": "nao@mabinogiworld.com",
 	});
 
 	client.info("Client connecing...");
-	client.connect();
+	client.connect(function (){
+		client.memory.account("Kadalyn").add({
+			"password": "password"
+		});
+	});
 });
