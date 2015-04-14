@@ -58,7 +58,7 @@ module.exports = function NickServ(irc) {
 
 	function recv(data) {
 		if (data.sender.nick == irc.memory.config("nickserv", "name", "NickServ")) {
-			var ret = memory.packet({ "numeric": "000", "header": "nickserv" }).read(data.text);
+			var ret = irc.memory.packet({ "numeric": "000", "context": "nickserv" }).read(data.text);
 			if (ret === false) {
 				ret = data;
 				ret.event = "NickServ(Unhandled)";
@@ -68,8 +68,8 @@ module.exports = function NickServ(irc) {
 		return false;
 	}
 
-	irc.on("PRIVMSG", recv);
-	irc.on("NOTICE", recv);
+	irc.on("PRIVMSG(NickServ)", recv);
+	irc.on("NOTICE(NickServ)", recv);
 
 	irc.on("connected", function () {
 		var nick = irc.memory.my("nickname"), pass = irc.memory.my("nickpass"),
@@ -93,10 +93,12 @@ module.exports = function NickServ(irc) {
 	});
 
 	irc.on("NS_NOTREGISTERED", function (data) {
+		console.log("Name is not registered with NickServ.");
 		var nick = irc.memory.my("nickname"), preferred = irc.memory.my("nicknames")[0];
 
 		// If this is the preferred nickname we should register it
-		if (nick == nickname) {
+		if (nick == preferred) {
+			console.log("Registering...");
 			var buff = irc.memory.my(["nickpass", "email"]);
 			buff.password = buff.nickpass;
 			delete buff.nickpass;
@@ -108,6 +110,7 @@ module.exports = function NickServ(irc) {
 	function send(command, data) {
 		data.target = irc.memory.config("nickserv", "name", "NickServ");
 		data.text = irc.memory.packet(command, "nickserv");
+		if (!data.text) return false;
 		irc.send(irc.memory.config("nickserv", "mode", "PRIVMSG"), data);
 	}
 
