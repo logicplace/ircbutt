@@ -1,6 +1,8 @@
 var http = require("http"),
     URL = require("url"),
-    packets = require("packets");
+    _ = require("lodash"),
+    packets = require("packets"),
+    fs = require("fs");
 
 module.exports = function HTTPServer(irc) {
 	var pages = [];
@@ -8,6 +10,7 @@ module.exports = function HTTPServer(irc) {
 	// Create HTTP server
 	var server = http.createServer(function (request, response) {
 		var data = {};
+		irc.info("HTTP got request for " + request.url);
 
 		// If there's a cookie...
 		if (request.headers.cookie) {
@@ -26,6 +29,7 @@ module.exports = function HTTPServer(irc) {
 		if (url.query) data.get = crumble(url.query, "&");
 		if (url.hash) data.hash = url.hash.substr(1);
 		url = url.pathname;
+		if (url.slice(-1) == "/") url = url.slice(0, -1);
 
 		// Find matching path
 		for (var i = 0; i < pages.length; ++i) {
@@ -56,7 +60,7 @@ module.exports = function HTTPServer(irc) {
 					body = out.html;
 					response.setHeader("Content-Type", "text/html");
 				} else if ("json" in out) {
-					body = JSON.serialize(out.json);
+					body = JSON.stringify(out.json);
 					response.setHeader("Content-Type", "application/json");
 				}
 
@@ -67,10 +71,19 @@ module.exports = function HTTPServer(irc) {
 		}
 	});
 
+	// Listen on port
+	var address = irc.memory.config("http", "address", "localhost");
+	    port = irc.memory.config("http", "port", 8080);
+	server.listen(port, address, function () {
+		irc.info("HTTP server listening on " + address + ":" + port.toString());
+	});
+
 	// Listen for registrations
 	irc.on("register-http", function (data) {
 		pages.push({
-			"page": packets.compilePacket(data.page),
+			"page": packets.compilePacket(data.page.replace(/\/\/?/g, function (slashes) {
+				return slashes.length == 2 ? "/" : "%/";
+			})),
 			"handler": data.handler
 		});
 	});
@@ -90,11 +103,16 @@ module.exports = function HTTPServer(irc) {
 		"page": "/login/<username>/<password>",
 		"handler": function (data) {
 			// Restful login, sets cookie.
-			var account = irc.memory.account(data.params.username), success = account.login(data.params.password);
+			var username = data.params.username;
+			var account = irc.memory.account(username), success = account.login(data.params.password);
 			if (success) {
-				var sessionID = _.random(0, 0xfffffffffffffffffffffffffff).toString(16);
-				irc.memory.store("sessions", { "id": sessionID,  })
-				return { "cookie": { "session": sessionID }, "json": 1 };
+				var session = irc.memory.retrieve("sessions", { "account": username }), sessionID;
+				if (session.length) sessionID = session[0].id;
+				else {
+					sessionID = _.random(0, 0xfffffffffffffffffffffffffff).toString(16);
+					irc.memory.store("sessions", { "id": sessionID, "account": username })
+				}
+				return { "cookie": { "session": sessionID }, "json": sessionID };
 			} else {
 				return { "json": 0 };
 			}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login to your account</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script type="text/javascript">
+		function bake(list, separator) {
+			for (var i = 0; i < list.length; ++i) {
+				list[i] = encodeURI(list[i]);
+			}
+			return list.join(separator);
+		}
+
+		$(function () {
+			$("#submit").click(function () {
+				$.ajax({
+					"url": "/login/" + bake([
+							$("#username").val(),
+							$("#password").val()
+						], "/"),
+					"dataType": "json",
+					"success": function (data) {
+						if (data) {
+							document.cookie = "session=" + data;
+							window.location = "/login/success";
+						}
+						else $("#error").text("Login failed.");
+					},
+					"error": function () {
+						$("#error").text("Could not contact server.");
+					},
+				});
+			});
+		});
+	</script>
+</head>
+<body>
+	<div>Account Name: <input type="text" id="username" /></div>
+	<div>Password: <input type="text" id="password" /></div>
+	<div><input type="button" id="submit" value="Submit" /></div>
+	<div id="error"></div>
+</body>
+</html>
