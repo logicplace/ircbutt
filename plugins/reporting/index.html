@@ -28,7 +28,7 @@
 			$.ajax({
 				"url": "/reports/new/since/" + uid.toString(),
 				"dataType": "json",
-				"success": addReportsTo(".active-reports"),
+				"success": prependReportsTo(".active-reports"),
 			})
 		}
 
@@ -47,7 +47,13 @@
 			}
 		}
 
-		function addReports(selector, data) {
+		function prependReportsTo(selector) {
+			return function (data) {
+				addReports(selector, data, true);
+			}
+		}
+
+		function addReports(selector, data, prepend) {
 			var $elem = $(selector);
 			$(data).each(function () {
 				// Skip if exists
@@ -55,14 +61,17 @@
 
 				if (this.UID > uid) uid = this.UID;
 
-				$elem.append($("<tr>").attr("id", "row" + this.UID.toString()).append([
+				var list = [];
+				list.push($("<tr>").attr("id", "row" + this.UID.toString()).append([
 					$("<td>").text(moment(this.date).toString()),
 					$("<td>").append(nickify(this.user)),
 					$("<td>").text(this.report),
 					selector == ".active-reports"
 					? $("<td>").append($("<button>").data("uid", this.UID).text("☑").click(markResolved))
 					: undefined,
-				]))
+				]));
+
+				$elem[prepend ? "prepend" : "append"](list);
 			});
 		}
 
