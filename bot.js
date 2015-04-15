@@ -15,6 +15,7 @@ var server = net.createServer(function (c) {
 			send(":cirno.ppirc.net 001 Nao-tan :Welcome to the PPIrC IRC Network Nao-tan!~Nao-tan@localhost\r\n");
 			setTimeout(function () {
 				send(":Person!person@localhost PRIVMSG Nao-tan :u suck\r\n");
+				send(":Person!person@localhost PRIVMSG Nao-tan :im sry\r\n");
 			}, 1500)
 		}
 	});

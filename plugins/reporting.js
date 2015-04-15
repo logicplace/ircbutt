@@ -3,10 +3,14 @@ var _ = require("lodash"),
     fs = require("fs");
 
 module.exports = function Reporting(irc) {
-	var memory = irc.memory;
+	var memory = irc.memory, collecting = {};
 
 	irc.on("PRIVMSG", function (data) {
+		// Ignore if we're already collecting.
+		if (collecting[data.sender.nick]) return false;
+
 		irc.info("Got message from " + data.sender.nick + ", waiting for more.");
+		collecting[data.sender.nick] = true;
 		irc.collect({
 			"events": ["PRIVMSG(" + data.sender.nick + ")"],
 			"timeout": 5000,
@@ -47,6 +51,9 @@ module.exports = function Reporting(irc) {
 				if (staff) {
 					irc.message(staff, "New report from " + data.sender.nick + " received!");
 				}
+
+				// Stop locking this person
+				delete collecting[data.sender.nick];
 			},
 		});
 	});
