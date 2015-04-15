@@ -102,7 +102,23 @@ module.exports = function Reporting(irc) {
 				}
 
 				// Sort them
-				_.sortBy(reports, "date");
+				reports = _.sortByOrder(reports, "date", false);
+
+				// and return
+				return { "json": reports };
+			}),
+		});
+
+		irc.emit("register-http", {
+			"page": "/reports/new/since/<#uid>",
+			"handler": lockdown(function (data, permissions) {
+				reports = memory.retrieve("reporting.reports", function (report) {
+					return !report.handled && report.UID > data.params.uid &&
+						(permissions.all || _.intersection(permissions.channels, report.channels).length > 0);
+				});
+
+				// Sort them
+				reports = _.sortByOrder(reports, "date", false);
 
 				// and return
 				return { "json": reports };
@@ -127,11 +143,10 @@ module.exports = function Reporting(irc) {
 				}
 
 				// Sort them
-				_(reports).sortBy("date");
+				reports = _.sortByOrder(reports, "date", false);
 
 				// and return
 				var perpage = data.params.perpage || 10, start = data.params.page * perpage;
-				console.log(reports, start)
 				return { "json": reports.slice(start, start + perpage) };
 			}),
 		});
@@ -149,7 +164,7 @@ module.exports = function Reporting(irc) {
 				var reports = memory.retrieve("reporting.reports", { "UID": data.params.uid });
 
 				// Make sure user can do this
-				if (reports && _.intersection(permissions.channels, reports[0].channels).length > 0) {
+				if (reports && (permissions.all || _.intersection(permissions.channels, reports[0].channels).length > 0)) {
 					// Set mark
 					reports[0][data.params.mark] = true;
 					if (data.params.mark == "handled") {

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>View and manage reports</title>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script src="http://momentjs.com/downloads/moment.min.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			fetchActive();
+
+			setInterval(fetchNew, 3000);
+
+			$(".load-more").click(fetchHandled);
+		});
+
+		var uid = 0;
+		function fetchActive() {
+			$.ajax({
+				"url": "/reports/active",
+				"dataType": "json",
+				"success": addReportsTo(".active-reports"),
+			})
+		}
+
+		function fetchNew() {
+			$.ajax({
+				"url": "/reports/new/since/" + uid.toString(),
+				"dataType": "json",
+				"success": addReportsTo(".active-reports"),
+			})
+		}
+
+		var page = 0;
+		function fetchHandled() {
+			$.ajax({
+				"url": "/reports/closed/" + (page++).toString(),
+				"dataType": "json",
+				"success": addReportsTo(".handled-reports"),
+			})
+		}
+
+		function addReportsTo(selector) {
+			return function (data) {
+				addReports(selector, data);
+			}
+		}
+
+		function addReports(selector, data) {
+			var $elem = $(selector);
+			$(data).each(function () {
+				// Skip if exists
+				if ($("#row" + this.UID).length) return;
+
+				if (this.UID > uid) uid = this.UID;
+
+				$elem.append($("<tr>").attr("id", "row" + this.UID.toString()).append([
+					$("<td>").text(moment(this.date).toString()),
+					$("<td>").append(nickify(this.user)),
+					$("<td>").text(this.report),
+					selector == ".active-reports"
+					? $("<td>").append($("<button>").data("uid", this.UID).text("☑").click(markResolved))
+					: undefined,
+				]))
+			});
+		}
+
+		function markResolved() {
+			var uid = $(this).data("uid");
+			if (typeof(uid) !== "undefined") {
+				$.ajax({
+					"url": "/reports/mark/" + uid.toString() + "/handled",
+					"success": function (data) {
+						if (!data) return;
+
+						var $row = $("#row" + uid.toString()).detach();
+
+						// Pop off the button td
+						$row.children(":last-child").remove();
+
+						// Put this in handled
+						$(".handled-reports").append($row);
+					}
+				});
+			}
+		}
+
+		function nickify(nick) {
+			return $("<span>").append([
+				$("<span>").text("<").addClass("hide-angle"),
+				$("<span>").addClass("nick").text(nick),
+				$("<span>").text(">").addClass("hide-angle"),
+			]);
+		}
+	</script>
+
+	<style type="text/css">
+		html, body, table {
+			width: 100%;
+		}
+
+		table {
+			border: 1px solid black;
+		}
+
+		td:first-child {
+			width: 150px;
+		}
+
+		td:nth-child(2) {
+			width: 50px;
+			color: blue;
+		}
+
+		td:nth-child(3) {
+			white-space: pre;
+		}
+
+		.hide-angle {
+			width: 1px;
+			color: transparent;
+		}
+
+		.handled-reports {
+			color: #ddd;
+			margin-top: 20px;
+		}
+
+		.handled-reports td:nth-child(2) {
+			color: inherit;
+		}
+	</style>
+</head>
+<body>
+<table class="active-reports"></table>
+<table class="handled-reports"></table>
+<div class="load-more">Load more handled reports...</div>
+</body>
+</html>
