@@ -86,8 +86,8 @@ module.exports = function HTTPServer(irc) {
 	});
 
 	// Listen on port
-	var address = irc.memory.config("http", "address", "localhost");
-	    port = irc.memory.config("http", "port", 8080);
+	var address = irc.memory.config("http", "address", "::");
+	    port = irc.memory.config("http", "port", 8000);
 	server.listen(port, address, function () {
 		irc.info("HTTP server listening on " + address + ":" + port.toString());
 	});
