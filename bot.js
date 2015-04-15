@@ -43,5 +43,17 @@ server.listen(6667, function () {
 		client.memory.account("Kadalyn").add({
 			"password": "password"
 		});
+
+		client.memory.store("reporting.reports", {
+			"user": "Kadalyn",
+			"channels": ["#mabinogi"],
+			"report": "hello!!!",
+			"date": '2015-04-14T15:31:25-07:00',
+			"viewed": false,
+			"read": false,
+			"handled": false,
+			"handler": null,
+			"resolution": null,
+		})
 	});
 });
