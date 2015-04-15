@@ -55,6 +55,7 @@ server.listen(6667, function () {
 			"handled": false,
 			"handler": null,
 			"resolution": null,
+			"resolved": null,
 		})
 	});
 });

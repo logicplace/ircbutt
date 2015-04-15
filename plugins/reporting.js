@@ -40,6 +40,7 @@ module.exports = function Reporting(irc) {
 					"handled": false,
 					"handler": null,
 					"resolution": null,
+					"resolved": null,
 				});
 
 				// Tell the user their report was received.
@@ -74,7 +75,7 @@ module.exports = function Reporting(irc) {
 	}
 
 	// Main page
-	irc.on("modules-loaded", function() {
+	irc.passive("modules-loaded", function() {
 		irc.emit("register-http", {
 			"page": "/reports",
 			"handler": lockdown(function (data) {
@@ -96,7 +97,7 @@ module.exports = function Reporting(irc) {
 				} else {
 					// Return any reports from users in managed channels
 					reports = memory.retrieve("reporting.reports", function (report) {
-						return report.handled == false && _.intersection(permissions.channels, report.channels).length > 0;
+						return !report.handled && _.intersection(permissions.channels, report.channels).length > 0;
 					});
 				}
 
@@ -115,7 +116,7 @@ module.exports = function Reporting(irc) {
 				var reports;
 				if (permissions.all) {
 					// Get all unhandled reports.
-					reports = memory.retrieve("reports", {
+					reports = memory.retrieve("reporting.reports", {
 						"handled": true,
 					});
 				} else {
@@ -130,7 +131,34 @@ module.exports = function Reporting(irc) {
 
 				// and return
 				var perpage = data.params.perpage || 10, start = data.params.page * perpage;
+				console.log(reports, start)
 				return { "json": reports.slice(start, start + perpage) };
+			}),
+		});
+
+		// API call to mark a report as x
+		irc.emit("register-http", {
+			"page": "/reports/mark/<#uid>/<mark>",
+			"handler": lockdown(function (data, permissions) {
+				// Make sure mark is valid
+				if (["viewed", "read", "handled"].indexOf(data.params.mark) == -1) {
+					return { "json": 0 };
+				}
+
+				// Find report
+				var reports = memory.retrieve("reporting.reports", { "UID": data.params.uid });
+
+				// Make sure user can do this
+				if (reports && _.intersection(permissions.channels, reports[0].channels).length > 0) {
+					// Set mark
+					reports[0][data.params.mark] = true;
+					if (data.params.mark == "handled") {
+						reports[0].handler = data.session.account;
+						reports[0].resolved = moment().format();
+						reports[0].resolution = data.get.resolution || "";
+					}
+					return { "json": 1 };
+				}
 			}),
 		});
 	});
