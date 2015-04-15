@@ -9,6 +9,12 @@ module.exports = function HTTPServer(irc) {
 
 	// Create HTTP server
 	var server = http.createServer(function (request, response) {
+		if (request.url == "/favicon.ico") {
+			response.statusCode = 404;
+			response.end();
+			return;
+		}
+
 		var data = {};
 		irc.info("HTTP got request for " + request.url);
 
@@ -28,7 +34,7 @@ module.exports = function HTTPServer(irc) {
 		var url = URL.parse(request.url);
 		if (url.query) data.get = crumble(url.query, "&");
 		if (url.hash) data.hash = url.hash.substr(1);
-		url = url.pathname;
+		data.url = url = url.pathname;
 		if (url.slice(-1) == "/") url = url.slice(0, -1);
 
 		// Find matching path
@@ -69,6 +75,11 @@ module.exports = function HTTPServer(irc) {
 				return;
 			}
 		}
+
+		// Failed to find a match, return 404
+		irc.info("Page not found");
+		response.statusCode = 404;
+		response.end();
 	});
 
 	// Listen on port
