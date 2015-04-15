@@ -28,11 +28,14 @@ module.exports = function HTTPServer(irc) {
 				if (session) data.session = session[0];
 				delete data.cookie.session;
 			}
+		} else {
+			data.cookie = {};
 		}
 
 		// Parse the URL...
 		var url = URL.parse(request.url);
 		if (url.query) data.get = crumble(url.query, "&");
+		else data.get = {};
 		if (url.hash) data.hash = url.hash.substr(1);
 		data.url = url = url.pathname;
 		if (url.slice(-1) == "/") url = url.slice(0, -1);
@@ -45,7 +48,7 @@ module.exports = function HTTPServer(irc) {
 				var out = page.handler(data), body, header = {};
 
 				// It was unhandled
-				if (out === false) continue;
+				if (!_.isObject(out)) continue;
 
 				// Can return cookie, code, html, json, or redirect
 				if ("cookie" in out) {
