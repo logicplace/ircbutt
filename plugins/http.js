@@ -90,10 +90,14 @@ module.exports = function HTTPServer(irc) {
 	});
 
 	// Listen for registrations
-	irc.on("register-http", function (data) {
+	irc.passive("register-http", function (data) {
 		pages.push({
-			"page": packets.compilePacket(data.page.replace(/\/\/?/g, function (slashes) {
-				return slashes.length == 2 ? "/" : "%/";
+			"page": packets.compilePacket(data.page.replace(/\/|#|(%.|<([^>%]+|%.)+>|{([^}%]+|%.)+})/g, function (swap) {
+				switch (swap) {
+					case "/": return "%/";
+					case "#": return "/";
+					default: return swap;
+				}
 			})),
 			"handler": data.handler
 		});
