@@ -12,6 +12,12 @@
 		}
 
 		$(function () {
+			$("input").keyup(function (e) {
+				if (e.which == 13) {
+					$("#submit").click();
+				}
+			});
+
 			$("#submit").click(function () {
 				$.ajax({
 					"url": "/login/" + bake([
@@ -22,7 +28,11 @@
 					"success": function (data) {
 						if (data) {
 							document.cookie = "session=" + data;
-							window.location = "/login/success";
+							window.location = (
+								location.search.charAt(1) == "/" ?
+								decodeURI(location.search.substr(1)) :
+								"/login/success"
+							);
 						}
 						else $("#error").text("Login failed.");
 					},
@@ -33,11 +43,21 @@
 			});
 		});
 	</script>
+	<style type="text/css">
+		html, body, .full {
+			width: 100%;
+			height: 100%;
+		}
+
+		input {
+			width: 100%;
+		}
+	</style>
 </head>
-<body>
-	<div>Account Name: <input type="text" id="username" /></div>
-	<div>Password: <input type="text" id="password" /></div>
-	<div><input type="button" id="submit" value="Submit" /></div>
-	<div id="error"></div>
-</body>
+<body><table class="full"><tr><td align="center" valign="middle"><table>
+	<tr><td>Account Name:</td><td><input type="text" id="username" /></td></tr>
+	<tr><td>Password:</td><td><input type="password" id="password" /></td></tr>
+	<tr><td colspan="2" align="center"><input type="button" id="submit" value="Submit" /></td></tr>
+	<tr><td id="error"></td></tr>
+</table></td></tr></table></body>
 </html>
