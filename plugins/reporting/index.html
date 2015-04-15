@@ -5,17 +5,18 @@
 	<title>View and manage reports</title>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-	<script src="http://momentjs.com/downloads/moment.min.js"></script>
+	<script src="http://mabi.world/moment.js"></script>
 	<script type="text/javascript">
 		$(function() {
 			fetchActive();
 
 			setInterval(fetchNew, 3000);
+			setInterval(fetchStatuses, 3000);
 
 			$(".load-more").click(fetchHandled);
 		});
 
-		var uid = 0;
+		var uid = 0, leastuid = 0;
 		function fetchActive() {
 			$.ajax({
 				"url": "/reports/active",
@@ -41,6 +42,21 @@
 			})
 		}
 
+		function fetchStatuses() {
+			$.ajax({
+				"url": "/reports/status/" + leastuid.toString() + "/" + uid.toString(),
+				"dataType": "json",
+				"success": function (data) {
+					$(data).each(function () {
+						if (this.handled) {
+							var $row = $(".active-reports #row" + this.UID.toString());
+							if ($row.length) markResolved.apply($row.find("button"));
+						}
+					});
+				},
+			})
+		}
+
 		function addReportsTo(selector) {
 			return function (data) {
 				addReports(selector, data);
@@ -60,6 +76,7 @@
 				if ($("#row" + this.UID).length) return;
 
 				if (this.UID > uid) uid = this.UID;
+				if (this.UID < leastuid) leastuid = this.UID;
 
 				var list = [];
 				list.push($("<tr>").attr("id", "row" + this.UID.toString()).append([

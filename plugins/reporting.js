@@ -2,12 +2,23 @@ var _ = require("lodash"),
     moment = require("moment"),
     fs = require("fs");
 
+// http://stackoverflow.com/questions/23013588/pick-for-collections-underscore-lodash
+_.make = function(arr /*,  args... */) {
+    var props = [].slice.call(arguments, 1);
+    return arr.map(function(obj) {
+        return _.pick(obj, props);
+    });
+};
+
 module.exports = function Reporting(irc) {
 	var memory = irc.memory, collecting = {};
 
 	irc.on("PRIVMSG", function (data) {
 		// Ignore if we're already collecting.
 		if (collecting[data.sender.nick]) return false;
+
+		// Ignore if I am not the target.
+		if (data.target != memory.my("nickname")) return false;
 
 		irc.info("Got message from " + data.sender.nick + ", waiting for more.");
 		collecting[data.sender.nick] = true;
@@ -164,7 +175,7 @@ module.exports = function Reporting(irc) {
 				var reports = memory.retrieve("reporting.reports", { "UID": data.params.uid });
 
 				// Make sure user can do this
-				if (reports && (permissions.all || _.intersection(permissions.channels, reports[0].channels).length > 0)) {
+				if (reports.length && (permissions.all || _.intersection(permissions.channels, reports[0].channels).length > 0)) {
 					// Set mark
 					reports[0][data.params.mark] = true;
 					if (data.params.mark == "handled") {
@@ -174,6 +185,20 @@ module.exports = function Reporting(irc) {
 					}
 					return { "json": 1 };
 				}
+			}),
+		});
+
+		// API call to get statuses I hate this
+		irc.emit("register-http", {
+			"page": "/reports/status/<#start>/<#end>",
+			"handler": lockdown(function (data, permissions) {
+				// Find reports
+				var reports = memory.retrieve("reporting.reports", function (report) {
+					 return report.UID >= data.params.start && report.UID <= data.params.end &&
+						(permissions.all || _.intersection(permissions.channels, report.channels).length > 0);
+				});
+
+				return { "json": _.make(reports, "UID", "handled") };
 			}),
 		});
 	});
